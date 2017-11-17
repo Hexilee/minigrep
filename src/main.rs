@@ -20,16 +20,13 @@ Like grep or ack, written in rust
 
     
     // let args: Vec<String> = env::args().collect();
-    let config = match Config::new(matches) {
-        Ok(c) => c,
-        Err(s) => {
-            println!("Wrong usage!\n {}", s);
+    let config = Config::new(matches).unwrap_or_else( |err| {
+            eprintln!("Wrong usage!\n {}", err);
             process::exit(1);
-        }
-    };
+    });
 
     if let Err(e) = run(config) {
-        println!("Application error: {:?}", e);
+        eprintln!("Application error: {:?}", e);
         process::exit(1);
     }
 }
